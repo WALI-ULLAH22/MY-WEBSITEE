@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>History — WHO Demo</title>
+  <link rel="stylesheet" href="../CSS/style.css">
+  <link rel="icon" href="../IMAGES/who-logo.png">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="top-nav main-nav" aria-label="Main navigation">
+      <a class="btn" href="index.html">Home</a>
+      <a class="btn" href="about.html">About Us</a>
+      <a class="btn" href="contact.html">Contact Us</a>
+      <a class="btn" href="signup.html">Login &amp; Sign Up</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>History — Selected Viruses</h1>
+    <p>Ten selected viruses with short historical details and images. Each entry includes a "curve" canvas suitable for a small timeline/curve visualization.</p>
+
+    <section class="history-list">
+      <!-- Each .history-card contains two images, details and a small canvas (curve area) -->
+
+      <article class="history-card" id="h-covid">
+        <div class="history-media">
+          <img src="../IMAGES/images.jpg" alt="COVID-19" class="history-img">
+          <img src="../IMAGES/images (1).jpg" alt="COVID-19 2" class="history-img">
+        </div>
+        <div class="history-body">
+          <h3>COVID‑19</h3>
+          <ul>
+            <li><strong>First discovered:</strong> 2019</li>
+            <li><strong>Origin:</strong> Wuhan, China</li>
+            <li><strong>Source:</strong> Likely zoonotic</li>
+            <li><strong>Spread:</strong> Respiratory droplets / aerosols</li>
+            <li><strong>Major outbreaks:</strong> Global pandemic 2020 onwards</li>
+            <li><strong>Impact:</strong> Millions of deaths; global disruptions</li>
+          </ul>
+        </div>
+        <div class="history-curve">
+          <canvas id="curve-covid" width="400" height="120"></canvas>
+        </div>
+      </article>
+
+      <article class="history-card" id="h-influenza">
+        <div class="history-media">
+          <img src="../IMAGES/images (1).jpg" alt="Influenza" class="history-img">
+          <img src="../IMAGES/Blog_Flu-Vaccine-Storage-1024x573-1.jpg" alt="Influenza 2" class="history-img">
+        </div>
+        <div class="history-body">
+          <h3>Influenza (Flu)</h3>
+          <ul>
+            <li><strong>First identified (virus):</strong> 1933</li>
+            <li><strong>Origin:</strong> Global (multiple reservoirs)</li>
+            <li><strong>Source:</strong> Animal reservoirs (birds, swine)</li>
+            <li><strong>Spread:</strong> Respiratory droplets</li>
+            <li><strong>Major outbreaks:</strong> 1918, 1957, 1968, 2009</li>
+            <li><strong>Impact:</strong> Seasonal morbidity, occasional pandemics</li>
+          </ul>
+        </div>
+        <div class="history-curve"><canvas id="curve-influenza" width="400" height="120"></canvas></div>
+      </article>
+
+      <article class="history-card" id="h-dengue">
+        <div class="history-media">
+          <img src="../IMAGES/about.jpg" alt="Dengue" class="history-img">
+          <img src="../IMAGES/images (1).jpg" alt="Dengue 2" class="history-img">
+        </div>
+        <div class="history-body">
+          <h3>Dengue</h3>
+          <ul>
+            <li><strong>First described:</strong> 18th century (virus identified 1943)</li>
+            <li><strong>Origin:</strong> Likely Southeast Asia / Africa</li>
+            <li><strong>Source:</strong> Aedes mosquitoes</li>
+            <li><strong>Spread:</strong> Mosquito bites</li>
+            <li><strong>Major outbreaks:</strong> Frequent epidemics across tropics</li>
+            <li><strong>Impact:</strong> High morbidity in endemic regions</li>
+          </ul>
+        </div>
+        <div class="history-curve"><canvas id="curve-dengue" width="400" height="120"></canvas></div>
+      </article>
+
+      <article class="history-card" id="h-smallpox">
+        <div class="history-media">
+          <img src="../IMAGES/images (2).jpg" alt="Smallpox" class="history-img">
+          <img src="../IMAGES/images.jpg" alt="Smallpox 2" class="history-img">
+        </div>
+        <div class="history-body">
+          <h3>Smallpox</h3>
+          <ul>
+            <li><strong>Recorded:</strong> Ancient times</li>
+            <li><strong>Origin:</strong> Possibly Africa/Asia</li>
+            <li><strong>Source:</strong> Variola virus (human-to-human)</li>
+            <li><strong>Spread:</strong> Respiratory droplets / contact</li>
+            <li><strong>Major outbreaks:</strong> Global until eradication campaign</li>
+            <li><strong>Impact:</strong> Eradicated in 1980 via vaccination</li>
+          </ul>
+        </div>
+        <div class="history-curve"><canvas id="curve-smallpox" width="400" height="120"></canvas></div>
+      </article>
+
+      <article class="history-card" id="h-rabies">
+        <div class="history-media">
+          <img src="../IMAGES/Depositphotos_351906518_xl-2015-scaled.jpg" alt="Rabies" class="history-img">
+          <img src="../IMAGES/images (2).jpg" alt="Rabies 2" class="history-img">
+        </div>
+        <div class="history-body">
+          <h3>Rabies</h3>
+          <ul>
+            <li><strong>First recorded:</strong> Ancient</li>
+            <li><strong>Origin:</strong> Worldwide</li>
+            <li><strong>Source:</strong> Animal reservoirs (dogs, bats)</li>
+            <li><strong>Spread:</strong> Bites/saliva</li>
+            <li><strong>Major outbreaks:</strong> Endemic regions with dog transmission</li>
+            <li><strong>Impact:</strong> Fatal if untreated; PEP prevents disease</li>
+          </ul>
+        </div>
+        <div class="history-curve"><canvas id="curve-rabies" width="400" height="120"></canvas></div>
+      </article>
+
+      <article class="history-card" id="h-hiv">
+        <div class="history-media">
+          <img src="../IMAGES/hepatitis-a-small_0.jpg" alt="HIV/AIDS" class="history-img">
+          <img src="../IMAGES/hepatitis-a-small_0.jpg" alt="HIV/AIDS 2" class="history-img">
+        </div>
+        <div class="history-body">
+          <h3>HIV/AIDS</h3>
+          <ul>
+            <li><strong>First identified:</strong> 1981 (AIDS), 1983 (HIV)
+            </li>
+            <li><strong>Origin:</strong> Central Africa</li>
+            <li><strong>Source:</strong> Zoonotic transfer from SIV</li>
+            <li><strong>Spread:</strong> Blood, sexual contact, perinatal</li>
+            <li><strong>Major outbreaks:</strong> Global pandemic since 1980s</li>
+            <li><strong>Impact:</strong> Tens of millions of deaths; chronic treatment</li>
+          </ul>
+        </div>
+        <div class="history-curve"><canvas id="curve-hiv" width="400" height="120"></canvas></div>
+      </article>
+
+      <article class="history-card" id="h-hepatitis">
+        <div class="history-media">
+          <img src="../IMAGES/hepatitis-a-small_0.jpg" alt="Hepatitis" class="history-img">
+          <img src="../IMAGES/images (1).jpg" alt="Hepatitis 2" class="history-img">
+        </div>
+        <div class="history-body">
+          <h3>Hepatitis (A,B,C)</h3>
+          <ul>
+            <li><strong>Identified:</strong> 20th century (Hep C in 1989)</li>
+            <li><strong>Origin:</strong> Global</li>
+            <li><strong>Source:</strong> Food/water (A), blood (B/C)</li>
+            <li><strong>Spread:</strong> Varies by type</li>
+            <li><strong>Major outbreaks:</strong> Healthcare-related spread pre-screening</li>
+            <li><strong>Impact:</strong> Chronic liver disease, cancer risk</li>
+          </ul>
+        </div>
+        <div class="history-curve"><canvas id="curve-hepatitis" width="400" height="120"></canvas></div>
+      </article>
+
+      <article class="history-card" id="h-zika">
+        <div class="history-media">
+          <img src="../IMAGES/Blog_Flu-Vaccine-Storage-1024x573-1.jpg" alt="Zika" class="history-img">
+          <img src="../IMAGES/images.jpg" alt="Zika 2" class="history-img">
+        </div>
+        <div class="history-body">
+          <h3>Zika</h3>
+          <ul>
+            <li><strong>First discovered:</strong> 1947</li>
+            <li><strong>Origin:</strong> Zika Forest, Uganda</li>
+            <li><strong>Source:</strong> Aedes mosquitoes</li>
+            <li><strong>Spread:</strong> Mosquito bites; sexual transmission</li>
+            <li><strong>Major outbreaks:</strong> 2015–2016 Americas</li>
+            <li><strong>Impact:</strong> Congenital defects (microcephaly)</li>
+          </ul>
+        </div>
+        <div class="history-curve"><canvas id="curve-zika" width="400" height="120"></canvas></div>
+      </article>
+
+      <article class="history-card" id="h-ebola">
+        <div class="history-media">
+          <img src="../IMAGES/ebola.jpg" alt="Ebola" class="history-img">
+          <img src="../IMAGES/images (2).jpg" alt="Ebola 2" class="history-img">
+        </div>
+        <div class="history-body">
+          <h3>Ebola</h3>
+          <ul>
+            <li><strong>First discovered:</strong> 1976</li>
+            <li><strong>Origin:</strong> DRC region</li>
+            <li><strong>Source:</strong> Likely bats/wildlife</li>
+            <li><strong>Spread:</strong> Contact with bodily fluids</li>
+            <li><strong>Major outbreaks:</strong> 2014–2016 West Africa</li>
+            <li><strong>Impact:</strong> High fatality; serious local disruption</li>
+          </ul>
+        </div>
+        <div class="history-curve"><canvas id="curve-ebola" width="400" height="120"></canvas></div>
+      </article>
+      <article class="history-card" id="h-yellow">
+        <div class="history-media">
+          <img src="../IMAGES/images (1).jpg" alt="Yellow Fever" class="history-img">
+          <img src="../IMAGES/images.jpg" alt="Yellow Fever 2" class="history-img">
+        </div>
+        <div class="history-body">
+          <h3>Yellow Fever</h3>
+          <ul>
+            <li><strong>First identified (virus):</strong> 1901</li>
+            <li><strong>Origin:</strong> Tropical Africa / South America</li>
+            <li><strong>Source:</strong> Mosquito–primate cycle (Aedes/Haemagogus)</li>
+            <li><strong>Spread:</strong> Mosquito bites</li>
+            <li><strong>Major outbreaks:</strong> Historic urban epidemics in Americas and Africa</li>
+            <li><strong>Impact:</strong> Severe disease with jaundice/bleeding; effective vaccine reduces burden</li>
+          </ul>
+        </div>
+        <div class="history-curve"><canvas id="curve-yellow" width="400" height="120"></canvas></div>
+      </article>
+    </section>
+
+    <p style="margin-top:24px; font-size:13px; color:#9aaec0">Tip: open the 'Graphs (10)' page for fuller timeline graphs of these viruses.</p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    // small initializer to render small curve placeholders on this history page
+    (function(){
+      try{
+        var ids = ['curve-covid','curve-influenza','curve-dengue','curve-smallpox','curve-rabies','curve-hiv','curve-hepatitis','curve-zika','curve-ebola','curve-yellow'];
+        ids.forEach(function(id){ var cv = document.getElementById(id); if(!cv) return; try{ var ctx = cv.getContext('2d'); var labels = ['1950','1975','2000','2010','2015','2020']; var data = labels.map(function(_,i){ return Math.round( Math.abs(Math.sin((id.length+i)/2) * 200) + Math.random()*20 ); }); var g = ctx.createLinearGradient(0,0,0,cv.height); g.addColorStop(0,'rgba(0,230,255,0.28)'); g.addColorStop(1,'rgba(2,8,24,0.06)'); new Chart(ctx,{ type:'line', data:{ labels:labels, datasets:[{ label:id, data:data, borderColor:'#00e6ff', backgroundColor:g, fill:true, tension:0.3, pointRadius:0 }] }, options:{ responsive:false, plugins:{legend:{display:false}}, scales:{ x:{ display:false }, y:{ display:false } } } }); }catch(e){} });
+      }catch(e){ console.warn('history curves init failed', e); }
+    })();
+  </script>
+</body>
+</html>

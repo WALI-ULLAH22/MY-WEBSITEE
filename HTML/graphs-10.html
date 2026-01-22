@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Graphs (10) — WHO Demo</title>
+  <link rel="stylesheet" href="../CSS/style.css">
+  <link rel="icon" href="../IMAGES/who-logo.png">
+</head>
+<body>
+  <header class="site-header">
+  <!-- Global search widget -->
+  <div class="site-search" aria-hidden="false">
+    <button class="search-toggle" aria-label="Open search" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M21 21l-4.35-4.35" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="11" cy="11" r="6" stroke="#fff" stroke-width="2"/>
+      </svg>
+    </button>
+    <div class="search-box" role="search" aria-hidden="true">
+      <input class="search-input" type="search" placeholder="Search viruses, vaccines..." aria-label="Search">
+      <div class="search-results" role="listbox"></div>
+    </div>
+  </div>
+    <nav class="top-nav main-nav" aria-label="Main navigation">
+      <a class="btn" href="index.html">Home</a>
+      <a class="btn" href="about.html">About Us</a>
+      <a class="btn" href="contact.html">Contact Us</a>
+      <a class="btn" href="signup.html">Login &amp; Sign Up</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Graphs — Top 10 Viruses</h1>
+    <p>Sample timeline graphs for 10 major viruses. Data shown here are sample series for demonstration; I can replace with real datasets on request.</p>
+
+    <section class="graphs-grid">
+      <div class="graph-card"><canvas id="g-covid"></canvas><small>COVID‑19</small></div>
+      <div class="graph-card"><canvas id="g-influenza"></canvas><small>Influenza</small></div>
+      <div class="graph-card"><canvas id="g-dengue"></canvas><small>Dengue</small></div>
+      <div class="graph-card"><canvas id="g-smallpox"></canvas><small>Smallpox</small></div>
+      <div class="graph-card"><canvas id="g-rabies"></canvas><small>Rabies</small></div>
+      <div class="graph-card"><canvas id="g-hiv"></canvas><small>HIV/AIDS</small></div>
+      <div class="graph-card"><canvas id="g-hepatitis"></canvas><small>Hepatitis</small></div>
+      <div class="graph-card"><canvas id="g-zika"></canvas><small>Zika</small></div>
+      <div class="graph-card"><canvas id="g-ebola"></canvas><small>Ebola</small></div>
+      <div class="graph-card"><canvas id="g-yellow"></canvas><small>Yellow Fever</small></div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <section class="footer-feedback">
+    <h3>Feedback</h3>
+    <p>Help us improve — send suggestions or report issues.</p>
+    <form class="feedback-form" action="#" method="post">
+      <input type="email" name="email" placeholder="Your email (optional)">
+      <textarea name="message" rows="3" placeholder="Your feedback"></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+  <script src="../JS/graphs-10.js"></script>
+</body>
+</html>
+    <script src="../JS/dropdown-control.js"></script>
+    <script src="../JS/search.js"></script>

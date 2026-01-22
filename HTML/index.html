@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WHO</title>
+    <meta name="description" content="WHO demo — public health resources, live map, and informational content.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../IMAGES/who-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/style.css">
+    <style>
+/* Simple spacing between two rows of dropdown buttons */
+
+/* Make navbar a flex container */
+.info-navbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Create a visual break after 5 buttons */
+.info-navbar::after {
+    content: '';
+    width: 100%;
+    height: 0;
+    flex-basis: 100%;
+}
+
+/* Force 6th and 7th buttons to new line with spacing */
+.info-dropdown:nth-child(6),
+.info-dropdown:nth-child(7) {
+    margin-top: 25px;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 768px) {
+    .info-navbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .info-dropdown:nth-child(6),
+    .info-dropdown:nth-child(7) {
+        margin-top: 0;
+    }
+}
+</style>
+    <script>
+    
+// Responsive navigation menu toggle for mobile
+document.addEventListener('DOMContentLoaded', function() {
+    // Create mobile menu button
+    const createMobileMenu = () => {
+        const header = document.querySelector('.site-header');
+        if (!header || document.querySelector('.mobile-menu-btn')) return;
+        
+        const mobileBtn = document.createElement('button');
+        mobileBtn.className = 'mobile-menu-btn';
+        mobileBtn.innerHTML = '☰ Menu';
+        mobileBtn.setAttribute('aria-label', 'Toggle mobile menu');
+        
+        // Insert after logo or at beginning of header
+        header.insertBefore(mobileBtn, header.firstChild);
+        
+        // Toggle mobile menu
+        mobileBtn.addEventListener('click', function() {
+            const nav = document.querySelector('.info-navbar');
+            if (nav) {
+                nav.classList.toggle('mobile-open');
+                mobileBtn.textContent = nav.classList.contains('mobile-open') ? '✕ Close' : '☰ Menu';
+            }
+        });
+    };
+    
+    // Check screen size and add mobile menu
+    if (window.innerWidth <= 768) {
+        createMobileMenu();
+    }
+    
+    // Re-check on resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth <= 768) {
+            createMobileMenu();
+        } else {
+            // Remove mobile menu on desktop
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+            const nav = document.querySelector('.info-navbar');
+            if (mobileBtn) mobileBtn.remove();
+            if (nav) nav.classList.remove('mobile-open');
+        }
+    });
+    
+    // Close dropdowns when clicking outside on mobile
+    document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+            if (!e.target.closest('.info-dropdown')) {
+                document.querySelectorAll('.info-dropdown.open').forEach(drop => {
+                    drop.classList.remove('open');
+                });
+            }
+        }
+    });
+});
+</script>
+    <!-- Leaflet for interactive map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-sA+e2j3oYk8mSg4Z+GkYkqQ3qk2vYh7FQJ1x0zYxw4M=" crossorigin=""/>
+        <script type="appli cation/ld+json">
+        {
+            "@context":"https://schema.org",
+            "@type":"Organization",
+            "name":"World Health Organization (WHO)",
+            "url":"https://www.who.int",
+            "logo":"../IMAGES/who-logo.png",
+            "sameAs":["https://twitter.com/WHO","https://www.facebook.com/WHO","https://www.instagram.com/who/","https://www.youtube.com/user/who","https://www.linkedin.com/company/world-health-organization/"],
+            "contactPoint":[{"@type":"ContactPoint","telephone":"+41 22 791 21 11","contactType":"customer service","email":"info@who.int","areaServed":"Worldwide"}]
+        }
+        </script>
+</head>
+<body>
+    <div class="container">
+    <!-- Unified header: nav buttons (left) + contact info (right) -->
+    <header class="site-header edge-bleed">
+        <nav class="top-nav main-nav" aria-label="Main navigation">
+            <a class="btn" href="index.html">Home</a>
+            <a class="btn" href="about.html">About Us</a>
+            <a class="btn" href="contact.html">Contact Us</a>
+            <a class="btn" href="signup.html">Login &amp; Sign Up</a>
+        </nav>
+
+                
+
+    </header>
+<!-- animated search (icon toggles open) -->
+<div class="site-search" aria-hidden="false">
+    <button class="search-toggle" aria-label="Open search" type="button">
+        <!-- simple magnifier SVG -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M21 21l-4.35-4.35" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="11" cy="11" r="6" stroke="#fff" stroke-width="2"/>
+        </svg>
+    </button>
+    <div class="search-box" role="search" aria-label="Site search">
+        <form class="search-form" action="search.html" method="get">
+            <input class="search-input" name="q" type="search" placeholder="Search the site..." aria-label="Search" />
+        </form>
+        <div class="search-results" aria-live="polite"></div>
+    </div>
+</div>
+
+<!-- ================= INFO DROPDOWN thNAV ================= -->
+<section class="info-dropdown-section edge-bleed">
+    <div class="info-container">
+        <div class="logo-section">
+            <a href="index.html" aria-label="WHO emblem"><img src="../IMAGES/download.jpg" alt="WHO emblem"></a>
+        </div>
+        <div class="info-navbar">
+
+                <!-- VIRUS INFO dropdown (moved into the dropdown row) -->
+                <div class="info-dropdown">
+                    <a class="info-btn" href="VIRUS-INFO.html">VIRUS INFO ▾</a>
+                    <div class="info-menu" role="menu">
+                        <div class="info-cards">
+                            <a class="info-card" href="VIRUS-YEARWISE.html">
+                                <img src="/IMAGES/COMPREHENSIVE VIRUS INFO.jpg" alt="Virus overview">
+                                <h4>Comprehensive Virus Info</h4>
+                                <p>Year-wise chronology, economic impact analysis, and medical details for major viruses.</p>
+                            </a>
+                            <a class="info-card" href="ECONOMIC-IMPACT.html">
+                                <img src="/IMAGES/ECONOMIC IMPACT.jpg" alt="Economic impact">
+                                <h4>Economic Impact</h4>
+                                <p>Global GDP analysis and sector-level effects for major outbreaks.</p>
+                            </a>
+                            <a class="info-card" href="VIRUS-MEDICAL.html">
+                                <img src="/IMAGES/MEDICAL DETAILS.webp" alt="Medical detail">
+                                <h4>Medical Detail</h4>
+                                <p>Origins, current treatments, vaccines, and ongoing research for each virus.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-dropdown">
+            <a class="info-btn" href="types.html">Types of Viruses ▾</a>
+            <div class="info-menu" role="menu">
+                <div class="info-cards">
+                                    <a class="info-card" href="covid-19.html">
+                                        <img src="/IMAGES/c.jpg" alt="COVID-19">
+                                        <h4>COVID‑19</h4>
+                                        <p>Highly contagious respiratory disease caused by SARS‑CoV‑2; affects multiple organs and can cause long-term complications.</p>
+                                </a>
+                                    <a class="info-card" href="influenza.html">
+                                        <img src="../IMAGES/images (1).jpg" alt="Influenza">
+                                        <h4>Influenza (Flu)</h4>
+                                        <p>Seasonal viral infection affecting nose, throat and lungs; annual vaccination reduces severe outcomes.</p>
+                                </a>
+                                    <a class="info-card" href="dengue.html">
+                                        <img src="../IMAGES/about.jpg" alt="Dengue">
+                                        <h4>Dengue Virus</h4>
+                                        <p>Mosquito‑borne viral disease causing fever and severe joint pain; can progress to life‑threatening dengue hemorrhagic fever.</p>
+                                </a>
+                                    <a class="info-card" href="smallpox.html">
+                                        <img src="/IMAGES/SMALLPOX.jpg" alt="Smallpox">
+                                        <h4>Smallpox</h4>
+                                        <p>Historically deadly illness eradicated by vaccination in 1980; preserved only in secure laboratory stocks.</p>
+                                </a>
+                                    <a class="info-card" href="rabies.html">
+                                        <img src="/IMAGES/rabies.jpg" alt="Rabies">
+                                        <h4>Rabies</h4>
+                                        <p>Fatal encephalitis transmitted by animal bites; preventable by timely post‑exposure vaccination and animal vaccination programs.</p>
+                                </a>
+                                    <a class="info-card" href="hiv-aids.html">
+                                        <img src="/IMAGES/hiv aids.jpg" alt="HIV/AIDS">
+                                        <h4>HIV/AIDS</h4>
+                                        <p>Virus that attacks the immune system (CD4 cells); antiretroviral therapy controls infection and prevents transmission.</p>
+                                </a>
+                                    <a class="info-card" href="hepatitis.html">
+                                        <img src="/IMAGES/hepatitis.jpg" alt="Hepatitis">
+                                        <h4>Hepatitis (A, B, C)</h4>
+                                        <p>Group of viruses causing liver inflammation; vaccines exist for A and B, while Hep C is treatable with antivirals.</p>
+                                </a>
+                                    <a class="info-card" href="zika.html">
+                                        <img src="/IMAGES/zika virus.jpg" alt="Zika">
+                                        <h4>Zika Virus</h4>
+                                        <p>Mosquito‑transmitted virus associated with congenital birth defects; prevention focuses on vector control and protecting pregnant people.</p>
+                                </a>
+                                    <a class="info-card" href="ebola.html">
+                                        <img src="/IMAGES/ebola.jpg" alt="Ebola">
+                                        <h4>Ebola Virus</h4>
+                                        <p>Severe viral hemorrhagic fever with high fatality; outbreak control uses rapid detection, isolation, vaccination and community engagement.</p>
+                                </a>
+                                    <a class="info-card" href="yellow-fever.html">
+                                        <img src="/IMAGES/yellow feveer.jpg" alt="Yellow Fever">
+                                        <h4>Yellow Fever</h4>
+                                        <p>Mosquito-borne disease causing jaundice and bleeding; a single dose vaccine provides long-term protection in endemic regions.</p>
+                                </a>
+                </div>
+            </div>
+        </div>
+
+                <!-- Facts & Figures dropdown -->
+                <div class="info-dropdown">
+                    <a class="info-btn" href="FACTS-FIGURES.html">Facts & Figures ▾</a>
+                    <div class="info-menu" role="menu">
+                        <div class="info-cards">
+                            <a class="info-card" href="FACTS-FIGURES.html">
+                                <img src="/IMAGES/COMPREHENSIVE VIRUS INFO.jpg" alt="Facts and figures">
+                                <h4>Key Statistics</h4>
+                                <p>Global health metrics and outbreak data.</p>
+                            </a>
+                            <a class="info-card" href="FACTS-FIGURES.html">
+                                <img src="/IMAGES/ECONOMIC IMPACT.jpg" alt="Coverage data">
+                                <h4>Vaccination Coverage</h4>
+                                <p>Immunization rates and global vaccine distribution.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-dropdown">
+                    <a class="info-btn vaccine-btn" href="VACCINES.html">Vaccines ▾</a>
+                        <div class="info-menu" role="menu">
+                                <div class="info-cards">
+                                    <a class="info-card" href="covidvaccine.html">
+                                        <img src="/IMAGES/Depositphotos_351906518_xl-2015-scaled.jpg" alt="COVID-19 vaccine">
+                                        <h4>COVID‑19 Vaccine</h4>
+                                        <p>Multiple platforms (mRNA, viral vector, protein) deliver strong protection against severe disease. Booster and variant-updated doses are used to maintain protection in high-risk groups.</p>
+                                    </a>
+
+                                    <a class="info-card" href="influenzavaccine.html">
+                                        <img src="/IMAGES/Blog_Flu-Vaccine-Storage-1024x573-1.jpg" alt="Influenza vaccine">
+                                        <h4>Influenza Vaccine</h4>
+                                        <p>Annual vaccines (inactivated, recombinant or live attenuated) are chosen based on surveillance to match circulating strains and reduce severe outcomes each season.</p>
+                                    </a>
+
+                                    <a class="info-card" href="denguevaccine.html">
+                                        <img src="/IMAGES/DENGUE VACCINE.jpg" alt="Dengue vaccine">
+                                        <h4>Dengue Vaccine</h4>
+                                        <p>Newer dengue vaccines target populations in endemic areas; recommendations consider prior exposure and age. Vaccination complements mosquito-control efforts.</p>
+                                    </a>
+
+                                    <a class="info-card" href="smallpoxvaccine.html">
+                                        <img src="/IMAGES/SMALLPOX VACCINE.jpg" alt="Smallpox vaccine">
+                                        <h4>Smallpox Vaccine</h4>
+                                        <p>Historical vaccine that achieved eradication; now retained in secure stockpiles and used only under strict protocols for research and emergency preparedness.</p>
+                                    </a>
+
+                                    <a class="info-card" href="rabiesvaccine.html">
+                                        <img src="/IMAGES/RABIES VACCINE.jpg" alt="Rabies vaccine">
+                                        <h4>Rabies Vaccine</h4>
+                                        <p>Highly effective pre- and post-exposure vaccines are used worldwide; mass dog vaccination and accessible post-exposure prophylaxis prevent most human cases.</p>
+                                    </a>
+
+                                    <a class="info-card" href="hivvaccine.html">
+                                        <img src="/IMAGES/HIV VAACCINE.jpg" alt="HIV vaccine research">
+                                        <h4>HIV Vaccine (Research)</h4>
+                                        <p>No licensed preventive HIV vaccine yet; ongoing trials explore novel platforms (mRNA, vectors, broadly neutralizing antibodies) to overcome HIV variability.</p>
+                                    </a>
+
+                                    <a class="info-card" href="hepatitisvaccine.html">
+                                        <img src="/IMAGES/Hepatitis-B-A-Vaccine-Injury.jpg" alt="Hepatitis vaccines">
+                                        <h4>Hepatitis Vaccines</h4>
+                                        <p>Hepatitis A and B vaccines are safe, effective, and widely used in routine immunization programs to prevent acute and chronic liver disease.</p>
+                                    </a>
+
+                                    <a class="info-card" href="zikavaccine.html">
+                                        <img src="/IMAGES/ZIKA VACCINE.jpg" alt="Zika vaccine research">
+                                        <h4>Zika Vaccine (Research)</h4>
+                                        <p>Vaccine candidates progressed through trials after major outbreaks; research continues to focus on safety in pregnancy and durable protection.</p>
+                                    </a>
+
+                                    <a class="info-card" href="ebolavaccine.html">
+                                        <img src="/IMAGES/EBOLA VACCINE.jpg" alt="Ebola vaccine">
+                                        <h4>Ebola Vaccine</h4>
+                                        <p>Approved vaccines (e.g., rVSV-ZEBOV) are used in outbreak response to protect contacts and health workers; ring vaccination reduces spread in affected areas.</p>
+                                    </a>
+
+                                    <a class="info-card" href="yellowfevervaccine.html">
+                                        <img src="/IMAGES/YELOOW FEVEER VACCINE.jpg" alt="Yellow fever vaccine">
+                                        <h4>Yellow Fever Vaccine</h4>
+                                        <p>A single dose often provides long-lasting protection. Vaccination campaigns and traveler immunization requirements remain essential for prevention in endemic regions.</p>
+                                    </a>
+
+                                </div>
+                        </div>
+                </div>
+
+                <!-- Removed 'More' dropdown per user request -->
+
+                <!-- Removed: Timeline & History, Symptoms & Prevention, Statistics & Impact -->
+                <!-- Symptoms & Prevention quick dropdown (top-row) -->
+                <div class="info-dropdown">
+                    <a class="info-btn" href="SYMPTOMS-PREVENTION.html">Symptoms &amp; Prevention ▾</a>
+                    <div class="info-menu" role="menu">
+                        <div class="info-cards">
+                            <a class="info-card" href="SAFTEY.html">
+                                <img src="/IMAGES/symptoms.jpg" alt="Safety guidance">
+                                <h4>Safety Guidance</h4>
+                                <p>Protective behaviours and post-exposure actions.</p>
+                            </a>
+                            <a class="info-card" href="PREVENTION.html">
+                                <img src="/IMAGES/prevention saftey.jpg" alt="Prevention">
+                                <h4>Prevention Strategies</h4>
+                                <p>Vaccination, vector control, hygiene and community measures.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Year-wise dropdown -->
+                <div class="info-dropdown">
+                    <a class="info-btn" href="VIRUS-YEARWISE.html">YEAR‑WISE ▾</a>
+                    <div class="info-menu" role="menu">
+                        <div class="info-cards">
+                            <a class="info-card" href="VIRUS-YEARWISE.html">
+                                <img src="/IMAGES/VIRUS HISTORY.jpg" alt="Year-wise">
+                                <h4>Year-wise Chronology</h4>
+                                <p>Jump to the year‑ordered history and milestones for major viruses.</p>
+                            </a>
+                            <a class="info-card" href="VIRUS-YEARWISE.html">
+                                <img src="/IMAGES/MILESTONE.jpg"alt="Chronology">
+                                <h4>Key Milestones</h4>
+                                <p>Important discovery and outbreak years for context and study.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline & History dropdown -->
+                <div class="info-dropdown info-dropdown--timeline">
+                    <a class="info-btn" href="TIMELINE.html">TIMELINE &amp; HISTORY ▾</a>
+                    <div class="info-menu timeline-history-menu" role="menu">
+                        <div class="th-tabs" role="tablist" aria-label="Timeline and History Tabs">
+                            <a class="th-tab th-tab-active" data-tab="history" role="tab" aria-selected="true" href="history.html">History</a>
+                            <a class="th-tab" data-tab="timeline" role="tab" aria-selected="false" href="graphs-10.html">Timeline (Graphs)</a>
+                        </div>
+
+                        <div class="th-panels">
+                            <div class="th-panel th-panel-active" id="history" role="tabpanel">
+                                <div class="history-cards">
+                                    <!-- COVID-19 -->
+                                    <article class="th-card">
+                                        <img src="../IMAGES/images.jpg" alt="COVID-19">
+                                        <div class="th-card-body">
+                                            <h4>COVID‑19</h4>
+                                                <div class="mini-graph"><canvas id="mini-covid" width="160" height="60"></canvas></div>
+                                            <ul>
+                                                <li><strong>First discovered:</strong> 2019</li>
+                                                <li><strong>Place of origin:</strong> Wuhan, Hubei, China</li>
+                                                <li><strong>Source:</strong> Likely zoonotic (bats, possible intermediate host)</li>
+                                                <li><strong>How it spreads:</strong> Respiratory droplets, aerosols, contact</li>
+                                                <li><strong>Major outbreaks:</strong> Global pandemic (2020–ongoing waves)</li>
+                                                <li><strong>Impact:</strong> Millions of deaths, healthcare strain, major economic disruption</li>
+                                            </ul>
+                                        </div>
+                                    </article>
+
+                                    <!-- Influenza -->
+                                    <article class="th-card">
+                                        <img src="../IMAGES/images (1).jpg" alt="Influenza">
+                                        <div class="th-card-body">
+                                            <h4>Influenza (Flu)</h4>
+                                                <div class="mini-graph"><canvas id="mini-influenza" width="160" height="60"></canvas></div>
+                                            <ul>
+                                                <li><strong>First discovered (virus identified):</strong> 1933</li>
+                                                <li><strong>Place of origin:</strong> Global (multiple early pandemics)</li>
+                                                <li><strong>Source:</strong> Animal reservoirs (avian, swine)</li>
+                                                <li><strong>How it spreads:</strong> Respiratory droplets</li>
+                                                <li><strong>Major outbreaks:</strong> 1918, 1957, 1968, 2009 H1N1</li>
+                                                <li><strong>Impact:</strong> Seasonal morbidity, periodic pandemics with high mortality and economic costs</li>
+                                            </ul>
+                                        </div>
+                                    </article>
+
+                                    <!-- Dengue -->
+                                    <article class="th-card">
+                                        <img src="../IMAGES/about.jpg" alt="Dengue">
+                                        <div class="th-card-body">
+                                            <h4>Dengue</h4>
+                                                <div class="mini-graph"><canvas id="mini-dengue" width="160" height="60"></canvas></div>
+                                            <ul>
+                                                <li><strong>First described:</strong> Late 18th century; virus identified in 1943</li>
+                                                <li><strong>Place of origin:</strong> Likely Southeast Asia / West Africa</li>
+                                                <li><strong>Source:</strong> Mosquito–primate cycle (Aedes spp.)</li>
+                                                <li><strong>How it spreads:</strong> Aedes mosquito bites</li>
+                                                <li><strong>Major outbreaks:</strong> Widespread epidemics across Asia and the Americas in 20th–21st centuries</li>
+                                                <li><strong>Impact:</strong> Significant morbidity, hospitalizations, economic burden in endemic areas</li>
+                                            </ul>
+                                        </div>
+                                    </article>
+
+                                    <!-- Smallpox -->
+                                    <article class="th-card">
+                                        <img src="/IMAGES/smallpox.jpg" alt="Smallpox">
+                                        <div class="th-card-body">
+                                            <h4>Smallpox</h4>
+                                                <div class="mini-graph"><canvas id="mini-smallpox" width="160" height="60"></canvas></div>
+                                            <ul>
+                                                <li><strong>First recorded:</strong> Ancient (historical records millennia old)</li>
+                                                <li><strong>Place of origin:</strong> Possibly Africa/Asia (historically widespread)</li>
+                                                <li><strong>Source:</strong> Human-to-human (variola virus)</li>
+                                                <li><strong>How it spreads:</strong> Respiratory droplets and close contact</li>
+                                                <li><strong>Major outbreaks:</strong> Endemic for centuries; global eradication campaign</li>
+                                                <li><strong>Impact:</strong> High historical mortality; eradicated in 1980 by vaccination</li>
+                                            </ul>
+                                        </div>
+                                    </article>
+
+                                    <!-- Rabies -->
+                                    <article class="th-card">
+                                        <img src="/IMAGES/rabies.jpg" alt="Rabies">
+                                        <div class="th-card-body">
+                                            <h4>Rabies</h4>
+                                                <div class="mini-graph"><canvas id="mini-rabies" width="160" height="60"></canvas></div>
+                                            <ul>
+                                                <li><strong>First recorded:</strong> Ancient; virus biology described in 19th century</li>
+                                                <li><strong>Place of origin:</strong> Worldwide (historically)</li>
+                                                <li><strong>Source:</strong> Animals (dogs, bats, other mammals)</li>
+                                                <li><strong>How it spreads:</strong> Saliva via bites or scratches</li>
+                                                <li><strong>Major outbreaks:</strong> Endemic hotspots; sporadic human cases where dog vaccination is limited</li>
+                                                <li><strong>Impact:</strong> Nearly always fatal if untreated; preventable by prompt PEP and animal vaccination</li>
+                                            </ul>
+                                        </div>
+                                    </article>
+
+                                    <!-- HIV/AIDS -->
+                                    <article class="th-card">
+                                        <img src="/IMAGES/hiv aids.jpg" alt="HIV/AIDS">
+                                        <div class="th-card-body">
+                                            <h4>HIV/AIDS</h4>
+                                                <div class="mini-graph"><canvas id="mini-hiv" width="160" height="60"></canvas></div>
+                                            <ul>
+                                                <li><strong>First identified:</strong> 1981 (AIDS); HIV isolated 1983</li>
+                                                <li><strong>Place of origin:</strong> Central Africa (likely near Kinshasa region)</li>
+                                                <li><strong>Source:</strong> Zoonotic transfer from chimpanzee SIV</li>
+                                                <li><strong>How it spreads:</strong> Sexual contact, blood, perinatal transmission</li>
+                                                <li><strong>Major outbreaks:</strong> Global pandemic beginning in 1980s</li>
+                                                <li><strong>Impact:</strong> Tens of millions of deaths; persistent social and economic effects; chronic illness management</li>
+                                            </ul>
+                                        </div>
+                                    </article>
+
+                                    <!-- Hepatitis -->
+                                    <article class="th-card">
+                                        <img src="/IMAGES/hepatitis-a-small_0.jpg" alt="Hepatitis">
+                                        <div class="th-card-body">
+                                            <h4>Hepatitis (A, B, C)</h4>
+                                                <div class="mini-graph"><canvas id="mini-hepatitis" width="160" height="60"></canvas></div>
+                                            <ul>
+                                                <li><strong>Virus identified:</strong> Hep A/B/C (20th century; Hep C in 1989)</li>
+                                                <li><strong>Place of origin:</strong> Global</li>
+                                                <li><strong>Source:</strong> A: fecal–oral; B: blood/body fluids; C: bloodborne</li>
+                                                <li><strong>How it spreads:</strong> Varies by type (contaminated food/water, blood, sexual/perinatal)</li>
+                                                <li><strong>Major outbreaks:</strong> Blood-transfusion related Hep C spread pre-screening</li>
+                                                <li><strong>Impact:</strong> Chronic liver disease, cirrhosis and liver cancer; major public-health burden</li>
+                                            </ul>
+                                        </div>
+                                    </article>
+
+                                    <!-- Zika -->
+                                    <article class="th-card">
+                                        <img src="/IMAGES/zika virus.jpg" alt="Zika">
+                                        <div class="th-card-body">
+                                            <h4>Zika Virus</h4>
+                                                <div class="mini-graph"><canvas id="mini-zika" width="160" height="60"></canvas></div>
+                                            <ul>
+                                                <li><strong>First discovered:</strong> 1947</li>
+                                                <li><strong>Place of origin:</strong> Zika Forest, Uganda</li>
+                                                <li><strong>Source:</strong> Mosquito–primate cycle (Aedes)</li>
+                                                <li><strong>How it spreads:</strong> Mosquito bites; sexual transmission documented</li>
+                                                <li><strong>Major outbreaks:</strong> 2015–2016 Americas epidemic</li>
+                                                <li><strong>Impact:</strong> Congenital birth defects (microcephaly), reproductive health concerns</li>
+                                            </ul>
+                                        </div>
+                                    </article>
+
+                                    <!-- Ebola -->
+                                    <article class="th-card">
+                                        <img src="/IMAGES/ebola.jpg" alt="Ebola">
+                                        <div class="th-card-body">
+                                            <h4>Ebola</h4>
+                                                <div class="mini-graph"><canvas id="mini-ebola" width="160" height="60"></canvas></div>
+                                            <ul>
+                                                <li><strong>First discovered:</strong> 1976</li>
+                                                <li><strong>Place of origin:</strong> Democratic Republic of the Congo (near Ebola River)</li>
+                                                <li><strong>Source:</strong> Likely fruit bats and wildlife reservoirs</li>
+                                                <li><strong>How it spreads:</strong> Direct contact with bodily fluids</li>
+                                                <li><strong>Major outbreaks:</strong> 2014–2016 West Africa; recurrent DRC outbreaks</li>
+                                                <li><strong>Impact:</strong> High case-fatality, local healthcare collapse, international response required</li>
+                                            </ul>
+                                        </div>
+                                    </article>
+
+                                    <!-- Yellow Fever -->
+                                    <article class="th-card">
+                                        <img src="/IMAGES/yellow feveer.jpg" alt="Yellow Fever">
+                                        <div class="th-card-body">
+                                            <h4>Yellow Fever</h4>
+                                                <div class="mini-graph"><canvas id="mini-yellow" width="160" height="60"></canvas></div>
+                                            <ul>
+                                                <li><strong>First identified (virus):</strong> 1901</li>
+                                                <li><strong>Place of origin:</strong> Tropical Africa (also South America)</li>
+                                                <li><strong>Source:</strong> Mosquito–primate cycle (Aedes/Haemagogus)</li>
+                                                <li><strong>How it spreads:</strong> Mosquito bites</li>
+                                                <li><strong>Major outbreaks:</strong> Historic urban epidemics in Americas and Africa; ongoing outbreaks</li>
+                                                <li><strong>Impact:</strong> Severe disease with jaundice/bleeding; effective vaccine has reduced burden</li>
+                                            </ul>
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+
+                            <div class="th-panel" id="timeline" role="tabpanel" aria-hidden="true">
+                                <div class="timeline-graphs">
+                                    <!-- Placeholder canvases for later graphing (one per virus) -->
+                                    <div class="graph-item"><canvas id="timeline-covid" width="320" height="160"></canvas><small>COVID‑19</small></div>
+                                    <div class="graph-item"><canvas id="timeline-influenza" width="320" height="160"></canvas><small>Influenza</small></div>
+                                    <div class="graph-item"><canvas id="timeline-dengue" width="320" height="160"></canvas><small>Dengue</small></div>
+                                    <div class="graph-item"><canvas id="timeline-smallpox" width="320" height="160"></canvas><small>Smallpox</small></div>
+                                    <div class="graph-item"><canvas id="timeline-rabies" width="320" height="160"></canvas><small>Rabies</small></div>
+                                    <div class="graph-item"><canvas id="timeline-hiv" width="320" height="160"></canvas><small>HIV/AIDS</small></div>
+                                    <div class="graph-item"><canvas id="timeline-hepatitis" width="320" height="160"></canvas><small>Hepatitis</small></div>
+                                    <div class="graph-item"><canvas id="timeline-zika" width="320" height="160"></canvas><small>Zika</small></div>
+                                    <div class="graph-item"><canvas id="timeline-ebola" width="320" height="160"></canvas><small>Ebola</small></div>
+                                    <div class="graph-item"><canvas id="timeline-yellow" width="320" height="160"></canvas><small>Yellow Fever</small></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+  </div>
+</section>
+
+                <!-- duplicate Symptoms block removed (Symptoms & Prevention is present in the navbar) -->
+
+    <!-- original sub-nav removed per request -->
+
+    <nav class="sub-nav edge-bleed new-subnav" aria-label="Sub navigation">
+        
+    </nav>
+
+    <!-- Image Slider -->
+    <div class="image-slider edge-bleed" data-interval="5000">
+        <div class="slides">
+            <div class="slide active"><img src="../IMAGES/about.jpg" alt="About"></div>
+            <div class="slide"><img src="../IMAGES/Blog_Flu-Vaccine-Storage-1024x573-1.jpg" alt="Flu Vaccine Storage"></div>
+            <div class="slide"><img src="../IMAGES/Depositphotos_351906518_xl-2015-scaled.jpg" alt="Deposit Photos"></div>
+            <div class="slide"><img src="../IMAGES/hepatitis-a-small_0.jpg" alt="Hepatitis"></div>
+            <div class="slide"><img src="../IMAGES/images (1).jpg" alt="Image 1"></div>
+            <div class="slide"><img src="../IMAGES/images (2).jpg" alt="Image 2"></div>
+            <div class="slide"><img src="../IMAGES/images.jpg" alt="Image"></div>
+            <div class="slide"><img src="../IMAGES/DENGUE VACCINE.jpg" alt="Dengue Vaccine"></div>
+            <div class="slide"><img src="../IMAGES/EBOLA VACCINE.jpg" alt="Ebola Vaccine"></div>
+            <div class="slide"><img src="../IMAGES/COMPREHENSIVE VIRUS INFO.jpg" alt="Virus Info"></div>
+            <div class="slide"><img src="../IMAGES/VIRUS HISTORY.jpg" alt="Virus History"></div>
+            <div class="slide"><img src="../IMAGES/smallpox.jpg" alt="Smallpox"></div>
+            <div class="slide"><img src="../IMAGES/c.jpg" alt="COVID-19"></div>
+            <div class="slide"><img src="../IMAGES/ZIKA VACCINE.jpg" alt="Zika Vaccine"></div>
+            <div class="slide"><img src="../IMAGES/YELOOW FEVEER VACCINE.jpg" alt="Yellow Fever Vaccine"></div>
+            <div class="slide"><img src="../IMAGES/RABIES VACCINE.jpg" alt="Rabies Vaccine"></div>
+            <div class="slide"><img src="../IMAGES/HIV VAACCINE.jpg" alt="HIV Vaccine (research)"></div>
+        </div>
+        <button class="slider-prev" aria-label="Previous slide"><</button>
+        <button class="slider-next" aria-label="Next slide">></button>
+    </div>
+
+    <!-- Hero / Introduction (refined) -->
+    <section class="hero-section edge-bleed">
+        <div class="hero-inner">
+            <div class="hero-text">
+                <h1>Viruses & Public Health</h1>
+                <p class="lead">Understanding viruses, prevention, vaccines, and global responses to protect communities.</p>
+                <div class="hero-actions">
+                    <a class="btn-primary" href="about.html">Learn More</a>
+                    <a class="btn-outline" href="contact.html">Get Involved</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <img src="../IMAGES/Depositphotos_351906518_xl-2015-scaled.jpg" alt="Virus visual" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Five virus cards (single horizontal row) -->
+    <section class="virus-cards edge-bleed" aria-label="Key viruses">
+        <div class="cards-row">
+            <article class="card">
+                <img src="../IMAGES/c.jpg" alt="COVID-19">
+                <h3>COVID‑19</h3>
+                <p>Highly infectious respiratory virus.</p>
+                <p>Vaccines available worldwide.</p>
+                <p>Prevention: masks, distancing, ventilation.</p>
+            </article>
+            <article class="card">
+                <img src="../IMAGES/images (1).jpg" alt="Influenza">
+                <h3>Influenza</h3>
+                <p>Seasonal respiratory illness.</p>
+                <p>Annual vaccines reduce severity.</p>
+                <p>Good hygiene and vaccination help.</p>
+            </article>
+            <article class="card">
+                <img src="../IMAGES/about.jpg" alt="Dengue">
+                <h3>Dengue</h3>
+                <p>Mosquito‑borne viral illness.</p>
+                <p>No universal vaccine; prevention focused on control.</p>
+                <p>Eliminate standing water and protect skin.</p>
+            </article>
+            <article class="card">
+                <img src="../IMAGES/hepatitis-a-small_0.jpg" alt="Hepatitis">
+                <h3>Hepatitis</h3>
+                <p>Liver inflammation from multiple viruses.</p>
+                <p>Vaccines exist for Hep A and B.</p>
+                <p>Safe practices reduce transmission.</p>
+            </article>
+            <article class="card">
+                <img src="../IMAGES/ebola.jpg" alt="Ebola">
+                <h3>Ebola</h3>
+                <p>Severe hemorrhagic fever; outbreaks localized.</p>
+                <p>Targeted vaccines and rapid response available.</p>
+                <p>Early detection and isolation save lives.</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- Detailed paragraph following the cards -->
+    <section class="virus-details">
+        <div class="details-inner">
+            <h2>About Viruses, Vaccines & Prevention</h2>
+            <p>Viruses vary widely in how they spread and the illnesses they cause. Vaccines remain one of the most effective tools to reduce severe disease and death. Where vaccines exist, high coverage protects individuals and communities; where vaccines are limited, swift public‑health measures — surveillance, testing, targeted treatments, and infection‑control practices — are essential. Prevention strategies include vaccination, proper hand hygiene, improved indoor ventilation, responsible use of masks during surges, and rapid isolation of cases. Public health systems, international cooperation, and transparent communication are critical to respond to outbreaks and ensure equitable access to medical countermeasures.</p>
+        </div>
+    </section>
+
+    <!-- ===================== WORKING MAP SOLUTION ===================== -->
+<!-- First, ensure Leaflet CSS is loaded in head -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+      crossorigin="anonymous">
+
+<!-- Map Section -->
+<section id="live-map" style="
+    position: relative;
+    width: 100%;
+    padding: 50px 0;
+    margin: 40px 0;
+    background: linear-gradient(135deg, #0c2461 0%, #1a5fb4 100%);
+    overflow: visible;
+    border-top: 3px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.1);
+">
+    <div style="
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 20px;
+    ">
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="
+                width: 70px;
+                height: 70px;
+                background: rgba(255, 255, 255, 0.9);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 20px;
+                box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            ">
+                <span style="font-size: 35px; color: #1a5fb4;">🌍</span>
+            </div>
+            <h2 style="
+                color: white;
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin: 0 0 10px 0;
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            ">WHO Headquarters Live Map</h2>
+            <p style="
+                color: rgba(255, 255, 255, 0.9);
+                font-size: 1.1rem;
+                max-width: 600px;
+                margin: 0 auto 25px;
+            ">Interactive map showing the World Health Organization headquarters in Geneva</p>
+        </div>
+
+        <!-- Map Container -->
+        <div style="
+            width: 100%;
+            height: 550px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        ">
+            <div id="who-map" style="width: 100%; height: 100%;"></div>
+            
+            <!-- Loading overlay -->
+            <div id="map-loading" style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, #1a5fb4, #0c2461);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            ">
+                <div style="
+                    width: 60px;
+                    height: 60px;
+                    border: 4px solid rgba(255, 255, 255, 0.2);
+                    border-top: 4px solid white;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                    margin-bottom: 20px;
+                "></div>
+                <p style="color: white; font-size: 18px; font-weight: 600;">Loading Interactive Map...</p>
+                <p style="color: rgba(255, 255, 255, 0.8); margin-top: 10px; font-size: 14px;">Initializing satellite view...</p>
+            </div>
+        </div>
+
+        <!-- Info Panel -->
+        <div style="
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        ">
+            <div style="
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                padding: 15px 20px;
+                border-radius: 10px;
+                flex: 1;
+                min-width: 250px;
+            ">
+                <div style="color: white; font-weight: 600; margin-bottom: 8px; font-size: 14px;">📍 WHO HEADQUARTERS</div>
+                <div style="color: rgba(255, 255, 255, 0.9); font-size: 13px;">
+                    Avenue Appia 20, 1211 Geneva 27, Switzerland<br>
+                    Coordinates: 46.232192° N, 6.124131° E<br>
+                    Phone: +41 22 791 21 11
+                </div>
+            </div>
+            
+            <div style="
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                padding: 15px 20px;
+                border-radius: 10px;
+                flex: 1;
+                min-width: 250px;
+            ">
+                <div style="color: white; font-weight: 600; margin-bottom: 8px; font-size: 14px;">🛰️ MAP STATUS</div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="
+                        width: 10px;
+                        height: 10px;
+                        background: #4CAF50;
+                        border-radius: 50%;
+                        animation: pulse 1.5s infinite;
+                    "></div>
+                    <div style="color: rgba(255, 255, 255, 0.9); font-size: 13px;">
+                        Real-time satellite view active<br>
+                        <span style="font-size: 11px; opacity: 0.8;">OpenStreetMap data</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Load Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin="anonymous"></script>
+
+<!-- Map Initialization Script -->
+<script>
+// Simple and reliable map initialization
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Starting map initialization...');
+    
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Initialize map function
+    function initMap() {
+        const mapElement = document.getElementById('who-map');
+        const loadingElement = document.getElementById('map-loading');
+        
+        if (!mapElement) {
+            console.error('Map element not found!');
+            return;
+        }
+        
+        // Check if Leaflet is loaded
+        if (typeof L === 'undefined') {
+            console.error('Leaflet not loaded! Loading it now...');
+            setTimeout(initMap, 500);
+            return;
+        }
+        
+        console.log('Leaflet loaded successfully, creating map...');
+        
+        try {
+            // Create map instance
+            const map = L.map(mapElement).setView([46.232192, 6.124131], 15);
+            
+            // Add tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+            
+            // Create custom WHO icon
+            const whoIcon = L.divIcon({
+                className: 'who-hq-icon',
+                html: `
+                    <div style="
+                        width: 50px;
+                        height: 50px;
+                        background: linear-gradient(135deg, #1a5fb4, #4a9fe9);
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-weight: bold;
+                        font-size: 14px;
+                        border: 3px solid white;
+                        box-shadow: 0 0 20px rgba(26, 95, 180, 0.8);
+                        cursor: pointer;
+                        animation: pulse 2s infinite;
+                    ">
+                        WHO
+                    </div>
+                `,
+                iconSize: [50, 50],
+                iconAnchor: [25, 50]
+            });
+            
+            // Add WHO HQ marker
+            const whoMarker = L.marker([46.232192, 6.124131], {icon: whoIcon}).addTo(map);
+            
+            whoMarker.bindPopup(`
+                <div style="padding: 15px; min-width: 250px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <div style="
+                            width: 40px;
+                            height: 40px;
+                            background: #1a5fb4;
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-weight: bold;
+                        ">
+                            🏢
+                        </div>
+                        <div>
+                            <h3 style="margin: 0; color: #1a5fb4;">WHO Headquarters</h3>
+                            <p style="margin: 5px 0 0 0; color: #666; font-size: 12px;">Global Health Leadership</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="margin: 5px 0; font-size: 13px;">
+                            <strong>📍 Address:</strong><br>
+                            Avenue Appia 20<br>
+                            1211 Geneva 27, Switzerland
+                        </p>
+                        <p style="margin: 5px 0; font-size: 13px;">
+                            <strong>📞 Phone:</strong> +41 22 791 21 11
+                        </p>
+                    </div>
+                    
+                    <div style="font-size: 11px; color: #888; text-align: center;">
+                        46.232192° N, 6.124131° E
+                    </div>
+                </div>
+            `).openPopup();
+            
+            // Add nearby locations with simple markers
+            const locations = [
+                {lat: 46.234, lng: 6.122, name: "Sate"},
+                {lat: 46.228, lng: 6.130, name: "Terminal 1"},
+                {lat: 46.236, lng: 6.128, name: "Grand-Saconnex"},
+                {lat: 46.230, lng: 6.120, name: "E62"},
+                {lat: 46.233, lng: 6.126, name: "Parc du Château-Pictet"},
+                {lat: 46.231, lng: 6.132, name: "Evo Fitness Genève"},
+                {lat: 46.235, lng: 6.124, name: "Green Village"},
+                {lat: 46.229, lng: 6.134, name: "UNAIDS"},
+                {lat: 46.237, lng: 6.122, name: "Parc du château de Penthes"}
+            ];
+            
+            locations.forEach(loc => {
+                L.marker([loc.lat, loc.lng]).addTo(map)
+                    .bindPopup(`<strong>${loc.name}</strong>`);
+            });
+            
+            // Add circle around WHO HQ
+            L.circle([46.232192, 6.124131], {
+                color: '#1a5fb4',
+                fillColor: '#1a5fb4',
+                fillOpacity: 0.1,
+                radius: 500
+            }).addTo(map);
+            
+            // Try to get user location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const userLat = position.coords.latitude;
+                        const userLng = position.coords.longitude;
+                        
+                        // Add user location marker
+                        const userIcon = L.divIcon({
+                            html: `
+                                <div style="
+                                    width: 30px;
+                                    height: 30px;
+                                    background: #4CAF50;
+                                    border-radius: 50%;
+                                    border: 3px solid white;
+                                    box-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+                                "></div>
+                            `,
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 30]
+                        });
+                        
+                        L.marker([userLat, userLng], {icon: userIcon})
+                            .addTo(map)
+                            .bindPopup('<strong>📍 Your Location</strong>');
+                        
+                        // Fit bounds to show both
+                        const bounds = L.latLngBounds(
+                            [userLat, userLng],
+                            [46.232192, 6.124131]
+                        );
+                        map.fitBounds(bounds, {padding: [50, 50]});
+                    },
+                    function(error) {
+                        console.log('Location access not granted:', error.message);
+                    }
+                );
+            }
+            
+            // Hide loading after map is ready
+            setTimeout(() => {
+                if (loadingElement) {
+                    loadingElement.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingElement.style.display = 'none';
+                    }, 300);
+                }
+                console.log('Map initialization complete!');
+            }, 1000);
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                map.invalidateSize();
+            });
+            
+            // Error handling
+            map.on('tileerror', function(error) {
+                console.warn('Map tile error:', error);
+            });
+            
+        } catch (error) {
+            console.error('Error creating map:', error);
+            if (loadingElement) {
+                loadingElement.innerHTML = `
+                    <div style="text-align: center; color: white;">
+                        <div style="font-size: 40px; margin-bottom: 15px;">⚠️</div>
+                        <h3 style="margin: 0 0 10px 0;">Map Error</h3>
+                        <p style="margin: 0 0 15px 0; opacity: 0.8;">Unable to load interactive map</p>
+                        <button onclick="window.location.reload()" style="
+                            padding: 10px 20px;
+                            background: white;
+                            color: #1a5fb4;
+                            border: none;
+                            border-radius: 5px;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">
+                            Try Again
+                        </button>
+                    </div>
+                `;
+            }
+        }
+    }
+    
+    // Start initialization
+    initMap();
+    
+    // Fallback: If Leaflet isn't loaded in 5 seconds, show static map
+    setTimeout(() => {
+        if (typeof L === 'undefined') {
+            console.error('Leaflet failed to load within timeout');
+            const loadingElement = document.getElementById('map-loading');
+            if (loadingElement) {
+                loadingElement.innerHTML = `
+                    <div style="text-align: center; color: white;">
+                        <div style="font-size: 40px; margin-bottom: 15px;">🌍</div>
+                        <h3 style="margin: 0 0 10px 0;">Static Map View</h3>
+                        <p style="margin: 0 0 20px 0; opacity: 0.8; max-width: 400px;">
+                            WHO Headquarters: Avenue Appia 20, 1211 Geneva 27, Switzerland
+                        </p>
+                        <div style="
+                            width: 300px;
+                            height: 200px;
+                            background: linear-gradient(135deg, #1a5fb4, #4a9fe9);
+                            border-radius: 10px;
+                            margin: 0 auto 20px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: white;
+                            font-weight: bold;
+                            font-size: 18px;
+                        ">
+                            🏢 WHO HQ
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    }, 5000);
+});
+</script>
+<!-- ===================== END WORKING SOLUTION ===================== -->
+            <!-- Clean footer: feedback form + contact + social links -->
+        </section>
+
+        <div class="footer-divider" aria-hidden="true"></div>
+        <!-- Standardized footer (feedback + social + WHO HQ) -->
+        <footer class="site-footer">
+            <div class="container footer-main">
+                <section class="footer-feedback">
+                    <h3>Feedback</h3>
+                    <p>Help us improve — share suggestions, report issues, or praise.</p>
+                    <form id="footer-feedback-form" class="feedback-form" aria-label="Feedback form">
+                        <input type="text" name="name" placeholder="Your name" required />
+                        <input type="email" name="email" placeholder="you@example.com" required />
+                        <input type="text" name="subject" placeholder="Subject (optional)" />
+                        <select name="category" aria-label="Feedback category">
+                            <option value="general">General</option>
+                            <option value="bug">Bug report</option>
+                            <option value="suggestion">Suggestion</option>
+                            <option value="praise">Praise</option>
+                        </select>
+                        <div class="rating-row">
+                            <label class="rating-label" style="margin:0;font-weight:700;">Rating:</label>
+                            <div class="star-rating" role="radiogroup" aria-label="Rating">
+                                <input type="hidden" name="rating" value="4" />
+                                <button type="button" class="star" data-value="1" aria-label="1 star" aria-pressed="false">☆</button>
+                                <button type="button" class="star" data-value="2" aria-label="2 stars" aria-pressed="false">☆</button>
+                                <button type="button" class="star" data-value="3" aria-label="3 stars" aria-pressed="false">☆</button>
+                                <button type="button" class="star" data-value="4" aria-label="4 stars" aria-pressed="false">☆</button>
+                                <button type="button" class="star" data-value="5" aria-label="5 stars" aria-pressed="false">☆</button>
+                            </div>
+                        </div>
+                        <textarea name="message" placeholder="Your feedback" rows="6" required></textarea>
+                        <label style="display:flex;align-items:center;gap:8px;">
+                            <input type="checkbox" name="followUp" /> Allow follow-up via email
+                        </label>
+                        <button class="btn-primary" type="submit">Send feedback</button>
+                        <div class="footer-feedback-status" aria-live="polite"></div>
+                    </form>
+                    <ul class="social-list">
+                        <li><a href="https://twitter.com/WHO" target="_blank" rel="noopener"><img src="../IMAGES/social/twitter.svg" alt="X (Twitter)"/> X: @WHO</a></li>
+                        <li><a href="https://www.instagram.com/who/" target="_blank" rel="noopener"><img src="../IMAGES/social/instagram.svg" alt="Instagram"/> Instagram: @who</a></li>
+                        <li><a href="https://www.facebook.com/WHO" target="_blank" rel="noopener"><img src="../IMAGES/social/facebook.svg" alt="Facebook"/> Facebook: WHO</a></li>
+                        <li><a href="https://www.youtube.com/user/WHO" target="_blank" rel="noopener"><img src="../IMAGES/social/youtube.svg" alt="YouTube"/> YouTube: WHO</a></li>
+                        <li><a href="https://www.linkedin.com/company/world-health-organization" target="_blank" rel="noopener"><img src="../IMAGES/social/linkedin.svg" alt="LinkedIn"/> LinkedIn: World Health Organization</a></li>
+                        <li><a href="https://www.tiktok.com/@who" target="_blank" rel="noopener"><img src="../IMAGES/social/instagram.svg" alt="TikTok"/> TikTok: @who</a></li>
+                    </ul>
+                    <address class="who-address">
+                        WHO Headquarters: Avenue Appia 20, 1211 Geneva 27, Switzerland<br>
+                        Phone: <a href="tel:+41227912111">+41 22 791 21 11</a><br>
+                        Email: <a href="mailto:info@who.int">info@who.int</a>
+                    </address>
+                </section>
+            </div>
+            <div class="container footer-bottom">
+                <p>&copy; World Health Organization</p>
+            </div>
+        </footer>
+
+
+
+        <!-- Leaflet, Chart.js and main JS -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-VkHt6r3Qx3q7m7K3QF3rAqg4j9W8z2+1rR2fYk8m4Mo=" crossorigin=""></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        <script src="../JS/main.js"></script>
+        <script src="../JS/dropdown-control.js"></script>
+        <script src="../JS/search.js"></script>
+
+    
+    <script>
+    // Image slider behavior: autoplay, arrows, dots, pause on hover/focus
+    (function(){
+        var slider = document.querySelector('.image-slider');
+        if(!slider) return;
+
+        var slides = Array.prototype.slice.call(slider.querySelectorAll('.slide'));
+        var prevBtn = slider.querySelector('.slider-prev');
+        var nextBtn = slider.querySelector('.slider-next');
+        var current = 0;
+        var interval = parseInt(slider.getAttribute('data-interval')) || 5000;
+        var timer = null;
+
+        function show(index){
+            slides.forEach(function(s, i){ s.classList.toggle('active', i===index); });
+            current = index;
+        }
+
+        function goTo(index){
+            if(index < 0) index = slides.length - 1;
+            if(index >= slides.length) index = 0;
+            show(index);
+        }
+
+        function next(){ goTo(current + 1); }
+        function prev(){ goTo(current - 1); }
+
+        function startTimer(){ if(timer) clearInterval(timer); timer = setInterval(next, interval); }
+        function stopTimer(){ if(timer) { clearInterval(timer); timer = null; } }
+        function resetTimer(){ stopTimer(); startTimer(); }
+
+        if(nextBtn) nextBtn.addEventListener('click', function(e){ e.stopPropagation(); next(); resetTimer(); });
+        if(prevBtn) prevBtn.addEventListener('click', function(e){ e.stopPropagation(); prev(); resetTimer(); });
+
+        // pause on hover/focus
+        slider.addEventListener('mouseenter', stopTimer);
+        slider.addEventListener('mouseleave', startTimer);
+        slider.addEventListener('focusin', stopTimer);
+        slider.addEventListener('focusout', function(e){ if(!slider.contains(e.relatedTarget)) startTimer(); });
+
+        // keyboard navigation
+        slider.addEventListener('keydown', function(e){ if(e.key === 'ArrowLeft') { prev(); resetTimer(); } else if(e.key === 'ArrowRight') { next(); resetTimer(); } });
+
+        // init
+        show(0);
+        startTimer();
+    })();
+    </script>
+    </div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    // Populate Types of Viruses menu with a grid of cards (COVID-19, Influenza, Dengue, Hepatitis, Ebola, Polio)
+    const typesBtn = Array.from(document.querySelectorAll('.info-btn')).find(b => /types of viruses/i.test(b.textContent));
+    if (typesBtn) {
+        const menu = typesBtn.parentElement.querySelector('.info-menu');
+        if (menu) {
+            const cardsContainer = menu.querySelector('.info-cards') || (function(){ const c=document.createElement('div'); c.className='info-cards'; menu.appendChild(c); return c; })();
+            const items = [
+                { img: '../IMAGES/images.jpg', alt: 'COVID-19', title: 'COVID‑19', desc: 'Highly infectious respiratory virus.', page: 'covid-19.html' },
+                { img: '../IMAGES/images (1).jpg', alt: 'Influenza', title: 'Influenza (Flu)', desc: 'Seasonal viral infection.', page: 'influenza.html' },
+                { img: '../IMAGES/about.jpg', alt: 'Dengue', title: 'Dengue Virus', desc: 'Mosquito‑borne disease.', page: 'dengue.html' },
+                { img: '../IMAGES/images (2).jpg', alt: 'Smallpox', title: 'Smallpox', desc: 'Deadly virus eradicated by vaccination.', page: 'smallpox.html' },
+                { img: '../IMAGES/Depositphotos_351906518_xl-2015-scaled.jpg', alt: 'Rabies', title: 'Rabies', desc: 'Viral disease transmitted through animal bites.', page: 'rabies.html' },
+                { img: '../IMAGES/hepatitis-a-small_0.jpg', alt: 'HIV/AIDS', title: 'HIV/AIDS', desc: 'Virus attacking the immune system.', page: 'hiv-aids.html' },
+                { img: '../IMAGES/hepatitis-a-small_0.jpg', alt: 'Hepatitis', title: 'Hepatitis (A, B, C)', desc: 'Liver-related viral infections.', page: 'hepatitis.html' },
+                { img: '../IMAGES/Blog_Flu-Vaccine-Storage-1024x573-1.jpg', alt: 'Zika', title: 'Zika Virus', desc: 'Mosquito‑transmitted virus.', page: 'zika.html' },
+                { img: '../IMAGES/ebola.jpg', alt: 'Ebola', title: 'Ebola Virus', desc: 'Severe hemorrhagic fever.', page: 'ebola.html' },
+                { img: '../IMAGES/images (1).jpg', alt: 'Yellow Fever', title: 'Yellow Fever', desc: 'Viral disease spread by mosquitoes.', page: 'yellow-fever.html' }
+            ];
+
+            items.forEach(item => {
+                const exists = Array.from(cardsContainer.querySelectorAll('h4')).some(h => h.textContent.trim().toLowerCase() === item.title.toLowerCase());
+                if (!exists) {
+                    const card = document.createElement('a'); card.className = 'info-card'; card.href = item.page;
+                    card.innerHTML = '<img src="'+item.img+'" alt="'+item.alt+'"><h4>'+item.title+'</h4><p>'+item.desc+'</p>';
+                    cardsContainer.appendChild(card);
+                }
+            });
+        }
+    }
+
+    // Accessibility: update aria-expanded on hover and focus
+    function updateDropdownOpenState(){
+        const anyOpen = document.querySelectorAll('.info-dropdown.open, .info-dropdown[data-hover="true"]').length > 0;
+        document.body.classList.toggle('dropdown-open', anyOpen);
+    }
+
+    document.querySelectorAll('.info-dropdown').forEach(function(drop) {
+        const btn = drop.querySelector('.info-btn');
+        const menu = drop.querySelector('.info-menu');
+        if (!btn || !menu) return;
+        drop.addEventListener('mouseenter', function(){ drop.setAttribute('data-hover','true'); btn.setAttribute('aria-expanded','true'); updateDropdownOpenState(); });
+        drop.addEventListener('mouseleave', function(){ drop.removeAttribute('data-hover'); btn.setAttribute('aria-expanded','false'); updateDropdownOpenState(); });
+        drop.addEventListener('focusin', function(){ btn.setAttribute('aria-expanded','true'); drop.setAttribute('data-hover','true'); updateDropdownOpenState(); });
+        drop.addEventListener('focusout', function(e){ if (!drop.contains(e.relatedTarget)) { btn.setAttribute('aria-expanded','false'); drop.removeAttribute('data-hover'); updateDropdownOpenState(); } });
+        // click/touch support: toggle .open class and aria attribute
+        btn.addEventListener('click', function(e){
+            const isOpen = drop.classList.contains('open');
+            // close other dropdowns
+            document.querySelectorAll('.info-dropdown.open').forEach(d=>{ if(d!==drop){ d.classList.remove('open'); const b=d.querySelector('.info-btn'); if(b) b.setAttribute('aria-expanded','false'); } });
+            if(isOpen){ drop.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
+            else { drop.classList.add('open'); btn.setAttribute('aria-expanded','true'); }
+            updateDropdownOpenState();
+            e.stopPropagation();
+        });
+    });
+
+    // close dropdowns when clicking outside
+    document.addEventListener('click', function(e){
+        document.querySelectorAll('.info-dropdown.open').forEach(function(d){ if(!d.contains(e.target)){ d.classList.remove('open'); const b=d.querySelector('.info-btn'); if(b) b.setAttribute('aria-expanded','false'); } });
+        updateDropdownOpenState();
+    });
+
+    // Timeline & History: tabs behavior (switch panels inside the dropdown)
+    document.querySelectorAll('.info-menu.timeline-history-menu').forEach(function(menu){
+        const tabsa = Array.from(menu.querySelectorAll('.th-tab'));
+        const panels = Array.from(menu.querySelectorAll('.th-panel'));
+        tabs.forEach(function(tab){
+            tab.addEventListener('click', function(){
+                tabs.forEach(t=>{ t.classList.remove('th-tab-active'); t.setAttribute('aria-selected','false'); });
+                tab.classList.add('th-tab-active'); tab.setAttribute('aria-selected','true');
+                const target = tab.getAttribute('data-tab');
+                panels.forEach(function(panel){
+                    if(panel.id === target){ panel.classList.add('th-panel-active'); panel.removeAttribute('aria-hidden'); }
+                    else { panel.classList.remove('th-panel-active'); panel.setAttribute('aria-hidden','true'); }
+                });
+                        // Ensure charts are initialized and resized when Timeline tab becomes visible
+                        try{
+                            if(target === 'timeline'){
+                                try{ if(typeof window.initTimelineCharts === 'function') window.initTimelineCharts(); }catch(e){}
+                                if(window._timelineCharts && window._timelineCharts.length){ window._timelineCharts.forEach(function(c){ try{ c.resize(); }catch(e){} }); }
+                            }
+                        }catch(e){}
+            });
+        });
+    });
+});
+</script>
+
+    <!-- dropdown-control already included above; removed duplicate include -->
+
+    <!-- Compact animated promo popup -->
+    <div class="promo-backdrop" id="promoBackdrop" aria-hidden="true">
+        <div class="promo-card" role="dialog" aria-modal="true" aria-labelledby="promoTitle">
+            <div class="promo-media">
+                <img src="../IMAGES/images.jpg" alt="Welcome" />
+            </div>
+            <div class="promo-body">
+                <h3 id="promoTitle">Welcome to WHO Demo</h3>
+                <p>Explore curated facts and clear guidance. Quick, focused, and designed for easy reading.</p>
+                <div class="promo-actions">
+                    <button class="btn-primary" id="promoClose">Close</button>
+                    <button class="btn-outline" id="promoNever">Don't show again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Promo popup: show once per session or until user clicks "Don't show again"
+    (function(){
+        try{
+            var key = 'promo_never_show';
+            var neverShow = localStorage.getItem(key);
+            var backdrop = document.getElementById('promoBackdrop');
+            if(!backdrop) return;
+            var card = backdrop.querySelector('.promo-card');
+            var closeBtn = document.getElementById('promoClose');
+            var neverBtn = document.getElementById('promoNever');
+            
+            function show(){
+                backdrop.setAttribute('aria-hidden','false');
+                document.body.classList.add('promo-open');
+                setTimeout(()=>card.classList.add('visible'),20);
+            }
+            
+            function hide(save){
+                card.classList.remove('visible');
+                setTimeout(()=>{
+                    backdrop.setAttribute('aria-hidden','true');
+                    document.body.classList.remove('promo-open');
+                    if(save){
+                        try{ localStorage.setItem(key,'1'); }catch(e){}
+                    }
+                },220);
+            }
+            
+            // Only show if user hasn't clicked "Don't show again"
+            if(!neverShow){ show(); }
+            
+            if(closeBtn) closeBtn.addEventListener('click', function(){ hide(false); });
+            if(neverBtn) neverBtn.addEventListener('click', function(){ hide(true); });
+            backdrop.addEventListener('click', function(e){ if(e.target === backdrop) hide(false); });
+            document.addEventListener('keydown', function(e){ if(e.key==='Escape') hide(false); });
+        }catch(e){}
+    })();
+    </script>
+    <script>
+// Complete responsive navigation fix
+document.addEventListener('DOMContentLoaded', function() {
+    // Fix ALL dropdowns
+    const allDropdowns = document.querySelectorAll('.info-dropdown, .dropdown');
+    
+    allDropdowns.forEach(dropdown => {
+        const button = dropdown.querySelector('.info-btn, .dropbtn, [class*="btn"]');
+        
+        if (button) {
+            button.addEventListener('click', function(e) {
+                if (window.innerWidth <= 1024) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Close other dropdowns
+                    allDropdowns.forEach(other => {
+                        if (other !== dropdown) {
+                            other.classList.remove('open');
+                        }
+                    });
+                    
+                    // Toggle current dropdown
+                    dropdown.classList.toggle('open');
+                }
+            });
+        }
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.info-dropdown, .dropdown')) {
+            allDropdowns.forEach(dropdown => {
+                dropdown.classList.remove('open');
+            });
+        }
+    });
+    
+    // Reset on desktop resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 1024) {
+            allDropdowns.forEach(dropdown => {
+                dropdown.classList.remove('open');
+            });
+        }
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Facts & Figures</title>
+  <link rel="stylesheet" href="../CSS/style.css">
+</head>
+<body>
+  <!-- Global search widget -->
+  <div class="site-search" aria-hidden="false">
+    <button class="search-toggle" aria-label="Open search" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M21 21l-4.35-4.35" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="11" cy="11" r="6" stroke="#fff" stroke-width="2"/>
+      </svg>
+    </button>
+    <div class="search-box" role="search" aria-hidden="true">
+      <input class="search-input" type="search" placeholder="Search viruses, vaccines..." aria-label="Search">
+      <div class="search-results" role="listbox"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <header class="site-header">
+      <nav class="top-nav main-nav" aria-label="Main navigation">
+        <a class="btn" href="index.html">Home</a>
+        <a class="btn" href="about.html">About Us</a>
+        <a class="btn" href="contact.html">Contact Us</a>
+        <a class="btn" href="signup.html">Login &amp; Sign Up</a>
+      </nav>
+    </header>
+
+    <main>
+      <section style="padding:18px;background:#fff;border-radius:12px;margin:18px 0;">
+        <h1>Facts & Figures</h1>
+        <p class="lead">Key Statistics about Viral Diseases and Global Health Impact</p>
+        <div class="facts-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px;">
+          <!-- Virus Key Statistics -->
+          <div class="fact-card" style="padding:12px;background:#fbfdff;border-radius:10px;">
+            <h3>Annual Deaths from Infectious Diseases</h3>
+            <p><strong>17 million+</strong> deaths annually from infectious diseases worldwide; viruses account for approximately 25% of all infectious disease deaths.</p>
+          </div>
+          <div class="fact-card" style="padding:12px;background:#fbfdff;border-radius:10px;">
+            <h3>Influenza Impact</h3>
+            <p><strong>250,000 to 500,000</strong> annual deaths globally from seasonal influenza; <strong>1 billion</strong> cases occur annually.</p>
+          </div>
+          <div class="fact-card" style="padding:12px;background:#fbfdff;border-radius:10px;">
+            <h3>HIV/AIDS Global Burden</h3>
+            <p><strong>39 million</strong> people living with HIV; <strong>650,000</strong> deaths annually; sub-Saharan Africa accounts for 70% of global burden.</p>
+          </div>
+          <div class="fact-card" style="padding:12px;background:#fbfdff;border-radius:10px;">
+            <h3>Dengue Epidemic Scale</h3>
+            <p><strong>390 million</strong> dengue infections annually; <strong>96 million</strong> clinically apparent cases; present in 130+ countries.</p>
+          </div>
+          <div class="fact-card" style="padding:12px;background:#fbfdff;border-radius:10px;">
+            <h3>COVID-19 Pandemic Statistics</h3>
+            <p><strong>7 million+</strong> confirmed deaths since 2019; <strong>5+ billion</strong> vaccination doses administered globally; still causing 1,000+ deaths weekly.</p>
+          </div>
+          <div class="fact-card" style="padding:12px;background:#fbfdff;border-radius:10px;">
+            <h3>Hepatitis Burden</h3>
+            <p><strong>354 million</strong> people infected with chronic Hepatitis B or C; <strong>1.5 million</strong> deaths annually; vaccine coverage at 89% for Hepatitis B.</p>
+          </div>
+          <div class="fact-card" style="padding:12px;background:#fbfdff;border-radius:10px;">
+            <h3>Vaccine-Preventable Diseases</h3>
+            <p><strong>4-5 million</strong> deaths prevented annually by vaccines; immunization coverage reaches 86% globally; still preventing potential pandemics.</p>
+          </div>
+          <div class="fact-card" style="padding:12px;background:#fbfdff;border-radius:10px;">
+            <h3>Emerging Viral Threats</h3>
+            <p><strong>75%</strong> of new infectious diseases are zoonotic; <strong>200+</strong> known viruses infect humans; <strong>1.7 million</strong> unknown viruses in wildlife.</p>
+          </div>
+          <div class="fact-card" style="padding:12px;background:#fbfdff;border-radius:10px;">
+            <h3>Rabies Mortality</h3>
+            <p><strong>59,000</strong> deaths annually; <strong>99%</strong> fatal if symptoms develop; <strong>95%</strong> preventable with post-exposure prophylaxis.</p>
+          </div>
+          <div class="fact-card" style="padding:12px;background:#fbfdff;border-radius:10px;">
+            <h3>Respiratory Viral Infections</h3>
+            <p><strong>500 million</strong> cases of common cold annually; respiratory viruses cause <strong>7% of global disease burden</strong>; peak season varies by hemisphere.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+            <!-- Reuse standardized footer from index.html -->
+        <footer class="site-footer">
+            <div class="container footer-main">
+                <section class="footer-feedback">
+                    <h3>Feedback</h3>
+                    <p>Help us improve — share suggestions, report issues, or praise.</p>
+                    <form id="footer-feedback-form" class="feedback-form" aria-label="Feedback form">
+                        <input type="text" name="name" placeholder="Your name" required />
+                        <input type="email" name="email" placeholder="you@example.com" required />
+                        <input type="text" name="subject" placeholder="Subject (optional)" />
+                        <select name="category" aria-label="Feedback category">
+                            <option value="general">General</option>
+                            <option value="bug">Bug report</option>
+                            <option value="suggestion">Suggestion</option>
+                            <option value="praise">Praise</option>
+                        </select>
+                        <div class="rating-row">
+                            <label class="rating-label" style="margin:0;font-weight:700;">Rating:</label>
+                            <div class="star-rating" role="radiogroup" aria-label="Rating">
+                                <input type="hidden" name="rating" value="4" />
+                                <button type="button" class="star" data-value="1" aria-label="1 star" aria-pressed="false">☆</button>
+                                <button type="button" class="star" data-value="2" aria-label="2 stars" aria-pressed="false">☆</button>
+                                <button type="button" class="star" data-value="3" aria-label="3 stars" aria-pressed="false">☆</button>
+                                <button type="button" class="star" data-value="4" aria-label="4 stars" aria-pressed="false">☆</button>
+                                <button type="button" class="star" data-value="5" aria-label="5 stars" aria-pressed="false">☆</button>
+                            </div>
+                        </div>
+                        <textarea name="message" placeholder="Your feedback" rows="6" required></textarea>
+                        <label style="display:flex;align-items:center;gap:8px;">
+                            <input type="checkbox" name="followUp" /> Allow follow-up via email
+                        </label>
+                        <button class="btn-primary" type="submit">Send feedback</button>
+                        <div class="footer-feedback-status" aria-live="polite"></div>
+                    </form>
+                    <ul class="social-list">
+                        <li><a href="https://twitter.com/WHO" target="_blank" rel="noopener"><img src="../IMAGES/social/twitter.svg" alt="X (Twitter)"/> X: @WHO</a></li>
+                        <li><a href="https://www.instagram.com/who/" target="_blank" rel="noopener"><img src="../IMAGES/social/instagram.svg" alt="Instagram"/> Instagram: @who</a></li>
+                        <li><a href="https://www.facebook.com/WHO" target="_blank" rel="noopener"><img src="../IMAGES/social/facebook.svg" alt="Facebook"/> Facebook: WHO</a></li>
+                        <li><a href="https://www.youtube.com/user/WHO" target="_blank" rel="noopener"><img src="../IMAGES/social/youtube.svg" alt="YouTube"/> YouTube: WHO</a></li>
+                        <li><a href="https://www.linkedin.com/company/world-health-organization" target="_blank" rel="noopener"><img src="../IMAGES/social/linkedin.svg" alt="LinkedIn"/> LinkedIn: World Health Organization</a></li>
+                        <li><a href="https://www.tiktok.com/@who" target="_blank" rel="noopener"><img src="../IMAGES/social/instagram.svg" alt="TikTok"/> TikTok: @who</a></li>
+                    </ul>
+                    <address class="who-address">
+                        WHO Headquarters: Avenue Appia 20, 1211 Geneva 27, Switzerland<br>
+                        Phone: <a href="tel:+41227912111">+41 22 791 21 11</a><br>
+                        Email: <a href="mailto:info@who.int">info@who.int</a>
+                    </address>
+                </section>
+            </div>
+            <div class="container footer-bottom">
+ 
+  <script src="../JS/main.js"></script>
+  <script src="../JS/dropdown-control.js"></script>
+  <script src="../JS/search.js"></script>
+</body>
+</html>
